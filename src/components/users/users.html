@@ -1,5 +1,26 @@
 <ul>
   @for(user of users(); track user) {
-    <li>{{user.name}}, {{user.email}}</li>
+    <li>{{user}}</li>
   }
 </ul>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>E-mail</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (user of users(); track user.name) {
+      <tr (click)="selectUser(user)">
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.email}}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+<p>
+  Selected user: {{selectedUser()}}
+</p>

@@ -12,4 +12,9 @@ export class Users {
     new User('Adam', 'adam@adam.sk'),
     new User('Eva', 'eva@eden.sk',2)
   ]);
+  selectedUser = signal<User|undefined>(undefined);
+
+  selectUser(user: User) {
+    this.selectedUser.set(user);
+  }
 }
