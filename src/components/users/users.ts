@@ -15,10 +15,15 @@ export class Users implements OnInit {
     new User('Eva', 'eva@eden.sk',2)
   ]);
   selectedUser = signal<User|undefined>(undefined);
+  errorText = signal<string>('');
 
   ngOnInit(): void {
 //    this.users.set(this.usersService.getUsers());
-    this.usersService.getUsers().subscribe(u => this.users.set(u));
+    this.usersService.getUsers().subscribe({
+      next: u => this.users.set(u),
+      error: e => this.errorText.set('Server is not responding'),
+      complete: () => console.log("http prud sa zatvoril")
+    });
   }
 
   selectUser(user: User) {

@@ -1,3 +1,6 @@
+@if(errorText()) {
+  <div class="errorAlert">{{errorText()}}</div>
+}
 <ul>
   @for(user of users(); track user) {
     <li>{{user}}</li>
