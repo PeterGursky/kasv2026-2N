@@ -1,18 +1,23 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { Auth } from '../../entities/auth';
+import { FormsModule } from '@angular/forms';
+import { UsersService } from '../../services/users-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatIconModule, FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login {
+  usersService = inject(UsersService);
+  router = inject(Router);
   hide = signal(true);
   auth = signal<Auth>(new Auth('Peter','sovy'));
   toggleShowPassword() {
@@ -24,5 +29,11 @@ export class Login {
   }
   getAuthJSON() {
     return JSON.stringify(this.auth());
+  }
+  onSubmit() {
+    this.usersService.login(this.auth()).subscribe(token => {
+      console.log("token:", token);
+      this.router.navigateByUrl('/users');
+    });
   }
 }
