@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { UsersService } from '../../services/users-service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MessageService } from '../../services/message-service';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class Login {
   usersService = inject(UsersService);
   router = inject(Router);
+  messageService = inject(MessageService);
   hide = signal(true);
   auth = signal<Auth>(new Auth('Peter','sovy'));
   errorText = signal('');
@@ -41,7 +43,8 @@ export class Login {
       error: err => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            this.errorText.set('Wrong name or password');
+            //this.errorText.set('Wrong name or password');
+            this.messageService.errorMessage('Wrong name or password');
           }
           if (err.status === 0) {
             this.errorText.set('Server is not available');
