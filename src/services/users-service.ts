@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { User } from '../entities/user';
-import { catchError, EMPTY, map, Observable, of } from 'rxjs';
+import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../entities/auth';
 import { MessageService } from './message-service';
@@ -27,6 +27,7 @@ export class UsersService {
     const url = this.token ? 'http://localhost:8080/users/' + this.token
                            : 'http://localhost:8080/users';
     return this.http.get<User[]>(url).pipe(
+      tap(jsonUsers => console.log('received users', jsonUsers)),
       map(jsonUsers => jsonUsers.map(jsonUser => User.clone(jsonUser))),
       catchError(err => this.processHttpError(err))
     );

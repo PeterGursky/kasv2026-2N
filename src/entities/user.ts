@@ -1,7 +1,9 @@
+import { Group } from "./group";
+
 export class User {
   
   public static clone(user: User): User {
-    return new User(user.name, user.email, user.id, user.lastLogin, user.password);
+    return new User(user.name, user.email, user.id, user.lastLogin, user.password, user.active, user.groups ? user.groups.map(g => Group.clone(g)) : []);
   }
 
   constructor(
@@ -9,7 +11,9 @@ export class User {
     public email: string,
     public id?: number,
     public lastLogin?: Date,
-    public password = ''
+    public password = '',
+    public active = true,
+    public groups: Group[] = []
   ){}
 
   toString() {

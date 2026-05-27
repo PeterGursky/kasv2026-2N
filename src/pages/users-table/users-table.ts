@@ -14,6 +14,9 @@ export class UsersTable implements OnInit{
   users = signal<User[]>([]);
 
   ngOnInit() {
-    this.usersService.getUsers().subscribe(u => this.users.set(u));
+    this.usersService.getUsers().subscribe(u => {
+      console.log('Received users in users-table:', u);
+      this.users.set(u);
+    });
   }
 }

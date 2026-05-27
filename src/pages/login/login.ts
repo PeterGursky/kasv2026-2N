@@ -23,7 +23,6 @@ export class Login {
   messageService = inject(MessageService);
   hide = signal(true);
   auth = signal<Auth>(new Auth('Peter','sovy'));
-  errorText = signal('');
   toggleShowPassword() {
     this.hide.update(current => !current);
   }
@@ -39,21 +38,6 @@ export class Login {
       next: token => {
         console.log("token:", token);
         this.router.navigateByUrl('/users');
-      },
-      error: err => {
-        if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
-            //this.errorText.set('Wrong name or password');
-            this.messageService.errorMessage('Wrong name or password');
-          }
-          if (err.status === 0) {
-            this.errorText.set('Server is not available');
-          }
-          if (err.status >= 500) {
-            this.errorText.set('Server error, please contanct server admin');
-            console.log('http error:', err);
-          }
-        }
       }
     });
   }
