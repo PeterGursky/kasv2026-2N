@@ -5,6 +5,18 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+.errorMessage {
+  @include mat.snack-bar-overrides((
+    button-color: hsl(0, 100%, 60%)
+  ));
+}
+
+.successMessage {
+  @include mat.snack-bar-overrides((
+    button-color: hsl(120, 100%, 50%)
+  ));
+}
+
 html {
   height: 100%;
   @include mat.theme(

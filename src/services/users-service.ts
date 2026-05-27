@@ -27,13 +27,15 @@ export class UsersService {
     const url = this.token ? 'http://localhost:8080/users/' + this.token
                            : 'http://localhost:8080/users';
     return this.http.get<User[]>(url).pipe(
-      map(jsonUsers => jsonUsers.map(jsonUser => User.clone(jsonUser)))
+      map(jsonUsers => jsonUsers.map(jsonUser => User.clone(jsonUser))),
+      catchError(err => this.processHttpError(err))
     );
   }
   login(auth: Auth):Observable<boolean> {
     return this.http.post('http://localhost:8080/login', auth, {responseType: 'text'}).pipe(
       map(token => {
         this.token = token;
+        this.messageService.successMessage('Login was successful');
         return true;
       }),
       catchError(err => this.processHttpError(err))
@@ -44,6 +46,16 @@ export class UsersService {
     if (error instanceof HttpErrorResponse) {
       if (error.status === 0) {
         this.messageService.errorMessage('Films server is not available');
+      }
+      if (error.status >= 500) {
+        this.messageService.errorMessage('Films server has serious problems. Please, contanct administrator.');
+      }
+      if (error.status >= 400 && error.status < 500) {
+        const body = error.error;
+        const message = body.errorMessage 
+                          ? body.errorMessage 
+                          : JSON.parse(body).errorMessage;
+        this.messageService.errorMessage(message);
       }
       return EMPTY;
     }
