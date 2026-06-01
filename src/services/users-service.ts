@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { User } from '../entities/user';
 import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -11,11 +11,24 @@ import { MessageService } from './message-service';
 export class UsersService {
   private http = inject(HttpClient);
   private messageService = inject(MessageService);
+  public loggedUserName = signal<string>('');
+
   private users: User[] = [
     new User('AdamService', 'adam@adam.sk'),
     new User('EvaService', 'eva@eden.sk',2)
   ];
-  private token = '';
+  // private token = '';
+  private get token(): string {
+    return localStorage.getItem('filmsToken') || '';
+  }
+
+  private set token(value: string) {
+    if (value) {
+      localStorage.setItem('filmsToken', value);
+    } else {
+      localStorage.removeItem('filmsToken');
+    }
+  }
 
   getUsersSynch(): User[] {
     return this.users;
@@ -36,6 +49,7 @@ export class UsersService {
     return this.http.post('http://localhost:8080/login', auth, {responseType: 'text'}).pipe(
       map(token => {
         this.token = token;
+        this.loggedUserName.set(auth.name);
         this.messageService.successMessage('Login was successful');
         return true;
       }),

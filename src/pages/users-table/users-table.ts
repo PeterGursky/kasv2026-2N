@@ -12,6 +12,7 @@ import { UsersService } from '../../services/users-service';
 export class UsersTable implements OnInit{
   usersService = inject(UsersService);
   users = signal<User[]>([]);
+  columns = signal<string[]>(['id','name','email','active','lastLogin']);
 
   ngOnInit() {
     this.usersService.getUsers().subscribe(u => {

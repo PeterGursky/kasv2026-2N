@@ -1,13 +1,23 @@
 <mat-toolbar>
   <span>Films app</span>
-  <a href="/users" matButton>
+  <a routerLink="/users" routerLinkActive="active" matButton>
     <mat-icon>group</mat-icon> Users
   </a>
 
   <span class="example-spacer"></span>
 
-  <a href="/login" matButton>
+  @let userName = loggedUser();
+  @if(userName) {
+    <span>{{userName}}</span>
+    <button matButton>
+      <mat-icon>logout</mat-icon>
+        Logout
+    </button>
+  } @else {
+  <a routerLink="/login" routerLinkActive="active" matButton>
     <mat-icon>login</mat-icon>
     Login
   </a>
+  }
+
 </mat-toolbar>
