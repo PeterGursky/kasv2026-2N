@@ -13,6 +13,7 @@ export class UsersService {
   private messageService = inject(MessageService);
   public loggedUserName = signal<string>('');
 
+  private serverUrl = 'http://localhost:8080/';
   private users: User[] = [
     new User('AdamService', 'adam@adam.sk'),
     new User('EvaService', 'eva@eden.sk',2)
@@ -37,8 +38,8 @@ export class UsersService {
     return of(this.users);
   }
   getUsers(): Observable<User[]> {
-    const url = this.token ? 'http://localhost:8080/users/' + this.token
-                           : 'http://localhost:8080/users';
+    const url = this.token ? this.serverUrl + 'users/' + this.token
+                           : this.serverUrl + 'users';
     return this.http.get<User[]>(url).pipe(
       tap(jsonUsers => console.log('received users', jsonUsers)),
       map(jsonUsers => jsonUsers.map(jsonUser => User.clone(jsonUser))),
@@ -46,7 +47,7 @@ export class UsersService {
     );
   }
   login(auth: Auth):Observable<boolean> {
-    return this.http.post('http://localhost:8080/login', auth, {responseType: 'text'}).pipe(
+    return this.http.post(this.serverUrl + 'login', auth, {responseType: 'text'}).pipe(
       map(token => {
         this.token = token;
         this.loggedUserName.set(auth.name);
@@ -54,6 +55,15 @@ export class UsersService {
         return true;
       }),
       catchError(err => this.processHttpError(err))
+    )
+  }
+
+  logout():Observable<boolean> {
+    return this.http.get(`${this.serverUrl}logout/${this.token}`).pipe(
+      map(() => {
+        this.token = '';
+        return true;
+      })
     )
   }
 
