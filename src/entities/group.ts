@@ -8,4 +8,8 @@ export class Group {
     public permissions: string[] = [],
     public id?: number
   ){}
+
+  toString() {
+    return `${this.id}: ${this.name}, permissions: ${this.permissions}`;
+  }
 }

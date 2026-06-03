@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../entities/user';
 import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -14,6 +14,7 @@ export class UsersService {
   private messageService = inject(MessageService);
   private router = inject(Router);
   public loggedUserName = signal<string>(this.userName);
+  public loggedIn = computed(() => this.loggedUserName() ? true : false);
 
   private serverUrl = 'http://localhost:8080/';
   private users: User[] = [
