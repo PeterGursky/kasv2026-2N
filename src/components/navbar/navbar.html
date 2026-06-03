@@ -9,7 +9,7 @@
   @let userName = loggedUser();
   @if(userName) {
     <span>{{userName}}</span>
-    <button matButton>
+    <button matButton (click)="logout()">
       <mat-icon>logout</mat-icon>
         Logout
     </button>

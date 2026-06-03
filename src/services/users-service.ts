@@ -4,6 +4,7 @@ import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../entities/auth';
 import { MessageService } from './message-service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ import { MessageService } from './message-service';
 export class UsersService {
   private http = inject(HttpClient);
   private messageService = inject(MessageService);
-  public loggedUserName = signal<string>('');
+  private router = inject(Router);
+  public loggedUserName = signal<string>(this.userName);
 
   private serverUrl = 'http://localhost:8080/';
   private users: User[] = [
@@ -28,6 +30,19 @@ export class UsersService {
       localStorage.setItem('filmsToken', value);
     } else {
       localStorage.removeItem('filmsToken');
+    }
+  }
+
+  private get userName(): string {
+    return localStorage.getItem('filmsUserName') || '';
+  }
+
+  private set userName(value: string) {
+    this.loggedUserName.set(value);
+    if (value) {
+      localStorage.setItem('filmsUserName', value);
+    } else {
+      localStorage.removeItem('filmsUserName');
     }
   }
 
@@ -50,7 +65,7 @@ export class UsersService {
     return this.http.post(this.serverUrl + 'login', auth, {responseType: 'text'}).pipe(
       map(token => {
         this.token = token;
-        this.loggedUserName.set(auth.name);
+        this.userName = auth.name;
         this.messageService.successMessage('Login was successful');
         return true;
       }),
@@ -62,7 +77,18 @@ export class UsersService {
     return this.http.get(`${this.serverUrl}logout/${this.token}`).pipe(
       map(() => {
         this.token = '';
+        this.userName = '';
         return true;
+      }),
+      catchError(err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 0) {
+            this.token = '';
+            this.userName = '';
+            return of(true);
+          }
+        }
+        return this.processHttpError(err);
       })
     )
   }
@@ -74,6 +100,13 @@ export class UsersService {
       }
       if (error.status >= 500) {
         this.messageService.errorMessage('Films server has serious problems. Please, contanct administrator.');
+      }
+      if (error.status === 401 && error.error.errorMessage === 'unknown token') {
+        this.token = '';
+        this.userName = '';
+        this.messageService.errorMessage('Session was ended, please log in again.');
+        this.router.navigateByUrl('/login');
+        return EMPTY;
       }
       if (error.status >= 400 && error.status < 500) {
         const body = error.error;
