@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../entities/auth';
 import { MessageService } from './message-service';
 import { Router } from '@angular/router';
+import { Group } from '../entities/group';
 
 @Injectable({
   providedIn: 'root',
@@ -61,6 +62,9 @@ export class UsersService {
       map(jsonUsers => jsonUsers.map(jsonUser => User.clone(jsonUser))),
       catchError(err => this.processHttpError(err))
     );
+  }
+  getGroups():Observable<Group[]> {
+    return this.http.get<Group[]>(this.serverUrl + 'groups');
   }
   login(auth: Auth):Observable<boolean> {
     return this.http.post(this.serverUrl + 'login', auth, {responseType: 'text'}).pipe(
