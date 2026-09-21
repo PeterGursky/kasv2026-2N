@@ -8,12 +8,13 @@
       <mat-form-field>
         <mat-label>User name</mat-label>
         <!-- <input matInput [value]="auth().name" (keyup)="updateName($event)"> -->
-        <input matInput [(ngModel)]="auth().name" name="username">
+        <input matInput [(ngModel)]="auth().name" name="username" required minlength="5">
+        <div>Chyba</div>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
         <input matInput [type]="hide() ? 'password' : 'text'" 
-          [(ngModel)]="auth().password" name="password">
+          [(ngModel)]="auth().password" name="password" required>
         <button type="button" matIconButton matSuffix
           (click)="toggleShowPassword()"
           [attr.aria-label]="'Hide password'"

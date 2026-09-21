@@ -7,7 +7,9 @@ import { Group } from '../entities/group';
 export class GroupsPipe implements PipeTransform {
   transform(value: Group[], type?: string): string {
     if (type === 'permissions') {
-      return value.map(g => g.permissions.join(', ')).join('; ');
+      const allPerms= value.map(g => g.permissions).flat();
+      const setPerms = new Set(allPerms);
+      return Array.from(setPerms).join(', ');
     }
     return value.map(g => g.name).join(', ');
   }

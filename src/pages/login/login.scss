@@ -16,3 +16,9 @@ mat-card-actions {
   background-color: rgb(248, 162, 162);
   padding: 0.5em 1em;
 }
+input[name="username"].ng-valid + div {
+  display: none;
+}
+input[name="username"].ng-invalid + div {
+  display: block;
+}
