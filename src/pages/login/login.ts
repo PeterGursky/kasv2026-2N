@@ -10,10 +10,11 @@ import { UsersService } from '../../services/users-service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MessageService } from '../../services/message-service';
+import { ValidationErrorPipe } from '../../pipes/validation-error-pipe';
 
 @Component({
   selector: 'app-login',
-  imports: [MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatIconModule, FormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatIconModule, FormsModule, ValidationErrorPipe],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -40,5 +41,8 @@ export class Login {
         this.router.navigateByUrl('/users');
       }
     });
+  }
+  toJson(object: any) {
+    return JSON.stringify(object);
   }
 }

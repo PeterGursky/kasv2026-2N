@@ -8,19 +8,33 @@
       <mat-form-field>
         <mat-label>User name</mat-label>
         <!-- <input matInput [value]="auth().name" (keyup)="updateName($event)"> -->
-        <input matInput [(ngModel)]="auth().name" name="username" required minlength="5">
-        <div>Chyba</div>
+        <input matInput [(ngModel)]="auth().name" name="username" #nameModel="ngModel" required minlength="5">
+        <mat-hint>Enter your username</mat-hint>
+        <mat-error>
+          @if (nameModel.errors) {
+            @if(nameModel.errors['minlength']) {
+              @let minerr = nameModel.errors['minlength'];
+              musí mať aspoň {{minerr.requiredLength}} a má {{minerr.actualLength}} znakov
+            } @else if (nameModel.errors['required']) {
+              hodnota musí byť vyplnená
+            } @else {
+              iná chyba: {{toJson(nameModel.errors)}}
+            }
+          }
+        </mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
         <input matInput [type]="hide() ? 'password' : 'text'" 
-          [(ngModel)]="auth().password" name="password" required>
+          [(ngModel)]="auth().password" name="password" required minlength="4" #passModel="ngModel">
         <button type="button" matIconButton matSuffix
           (click)="toggleShowPassword()"
           [attr.aria-label]="'Hide password'"
           [attr.aria-pressed]="hide()">
           <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
+        <mat-hint>Enter your password</mat-hint>
+        <mat-error>{{passModel.errors| validationError}}</mat-error>
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
