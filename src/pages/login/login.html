@@ -8,7 +8,7 @@
       <mat-form-field>
         <mat-label>User name</mat-label>
         <!-- <input matInput [value]="auth().name" (keyup)="updateName($event)"> -->
-        <input matInput [(ngModel)]="auth().name" name="username" #nameModel="ngModel" required minlength="5">
+        <input matInput [(ngModel)]="auth().name" name="username" #nameModel="ngModel" required minlength="3">
         <mat-hint>Enter your username</mat-hint>
         <mat-error>
           @if (nameModel.errors) {
@@ -26,7 +26,7 @@
       <mat-form-field>
         <mat-label>Password</mat-label>
         <input matInput [type]="hide() ? 'password' : 'text'" 
-          [(ngModel)]="auth().password" name="password" required minlength="4" #passModel="ngModel">
+          [(ngModel)]="auth().password" name="password" required #passModel="ngModel">
         <button type="button" matIconButton matSuffix
           (click)="toggleShowPassword()"
           [attr.aria-label]="'Hide password'"

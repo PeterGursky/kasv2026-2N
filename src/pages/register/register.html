@@ -26,7 +26,7 @@
           <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
         <mat-hint>Enter your password</mat-hint>
-        <mat-error></mat-error>
+        <mat-error>{{password | validationError}}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Repeated password</mat-label>

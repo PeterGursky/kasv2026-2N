@@ -66,6 +66,12 @@ export class UsersService {
   getGroups():Observable<Group[]> {
     return this.http.get<Group[]>(this.serverUrl + 'groups');
   }
+  register(user: User): Observable<User> {
+    return this.http.post<User>(this.serverUrl + 'register', user).pipe(
+      tap(registeredUser => this.messageService.successMessage(`User ${registeredUser.name} was registered successfully. You can log in now.`)),
+      catchError(err=>this.processHttpError(err))
+    );
+  }
   login(auth: Auth):Observable<boolean> {
     return this.http.post(this.serverUrl + 'login', auth, {responseType: 'text'}).pipe(
       map(token => {
@@ -77,7 +83,6 @@ export class UsersService {
       catchError(err => this.processHttpError(err))
     )
   }
-
   logout():Observable<boolean> {
     return this.http.get(`${this.serverUrl}logout/${this.token}`).pipe(
       map(() => {
