@@ -9,11 +9,14 @@ export class ValidationErrorPipe implements PipeTransform {
     if (!value) return "";
     if(value['minlength']) {
       const minerr = value['minlength'];
-      return `musí mať aspoň ${minerr.requiredLength} a má ${minerr.actualLength} znakov`;
+      return `must have at least ${minerr.requiredLength} chars and has ${minerr.actualLength}`;
     }
     if(value['required']) {
-      return `hodnota musí byť vyplnená`;
+      return `value is required`;
     }
-    return  'iná chyba: ' + JSON.stringify(value);
+    if(value['weakPassword']) {
+      return `Weak password, ${value['weakPassword']}`
+    }
+    return  'other error: ' + JSON.stringify(value);
   }
 }

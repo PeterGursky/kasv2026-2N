@@ -23,16 +23,9 @@ export class Register {
   usersService = inject(UsersService);
   router = inject(Router);
   hide = signal(true);
-  regModel = new FormGroup({
-    userName: new FormControl(''),
-    email: new FormControl(''),
-    password: new FormControl('', this.passwordValidator()),
-    password2: new FormControl('')
-  });
-  zxcvbn:ZxcvbnFactory;
+  passwordMessage = signal('');
 
-  public constructor() {
-    const options = {
+  private options = {
       translations: zxcvbnEnPackage.translations,
       graphs: zxcvbnCommonPackage.adjacencyGraphs,
       dictionary: {
@@ -40,8 +33,13 @@ export class Register {
         ...zxcvbnEnPackage.dictionary,
       },
     }
-    this.zxcvbn = new ZxcvbnFactory(options)
-  }
+  zxcvbn = new ZxcvbnFactory(this.options);
+  regModel = new FormGroup({
+    userName: new FormControl(''),
+    email: new FormControl(''),
+    password: new FormControl('', this.passwordValidator()),
+    password2: new FormControl('')
+  });
 
   toggleShowPassword() {
     this.hide.update(current => !current);
@@ -65,8 +63,10 @@ export class Register {
   passwordValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const result = this.zxcvbn.check(control.value);
+      const message = `Stregth: ${result.score}/4. Breakable in ${result.crackTimes.offlineSlowHashingXPerSecond.display}`;
+      this.passwordMessage.set(message); 
       if (result.score < 3) {
-        return {'weakPassword': 'Weak password'};
+        return {'weakPassword': message};
       } else {
         return null;
       }
