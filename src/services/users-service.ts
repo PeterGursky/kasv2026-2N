@@ -72,6 +72,11 @@ export class UsersService {
       catchError(err=>this.processHttpError(err))
     );
   }
+  userConficts(user: User): Observable<string[]> {
+    return this.http.post<string[]>(this.serverUrl + 'user-conflicts', user).pipe(
+      catchError(err=>this.processHttpError(err))
+    )
+  }
   login(auth: Auth):Observable<boolean> {
     return this.http.post(this.serverUrl + 'login', auth, {responseType: 'text'}).pipe(
       map(token => {

@@ -14,7 +14,7 @@
         <mat-label>E-mail</mat-label>
         <input matInput formControlName="email">
         <mat-hint>Enter your e-mail</mat-hint>
-        <mat-error></mat-error>
+        <mat-error>{{email.errors | validationError}}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
@@ -32,12 +32,12 @@
         <mat-label>Repeated password</mat-label>
         <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password2">
         <mat-hint>Write your password again</mat-hint>
-        <mat-error></mat-error>
+        <mat-error>{{password2.errors | validationError}}</mat-error>
       </mat-form-field>
 
     </mat-card-content>
     <mat-card-actions>
-      <button type="submit" matButton>Register</button>
+      <button type="submit" matButton [disabled]="regModel.invalid">Register</button>
     </mat-card-actions>
   </mat-card>
 </form>

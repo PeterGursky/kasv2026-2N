@@ -15,7 +15,16 @@ export class ValidationErrorPipe implements PipeTransform {
       return `value is required`;
     }
     if(value['weakPassword']) {
-      return `Weak password, ${value['weakPassword']}`
+      return `Weak password, ${value['weakPassword']}`;
+    }
+    if(value['email']) {
+      return "Please enter correct e-mail address";
+    }
+    if(value['pattern']) {
+      return "Incorrect input";
+    }
+    if(value['differentPasswords']) {
+      return value['differentPasswords'];
     }
     return  'other error: ' + JSON.stringify(value);
   }
