@@ -12,7 +12,7 @@ import { ZxcvbnFactory } from '@zxcvbn-ts/core'
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common'
 import * as zxcvbnEnPackage from '@zxcvbn-ts/language-en'
 import { ValidationErrorPipe } from '../../pipes/validation-error-pipe';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -101,8 +101,9 @@ export class Register {
       const name = field == 'name' ? control.value : '';
       const email = field == 'email' ? control.value : '';
       const user = new User(name, email);
-      this.usersService.userConficts(user)
-      return of(null);
+      return this.usersService.userConficts(user).pipe(
+        map(conflicts => conflicts.length == 0 ? null : {serverConflict: field + " already exists on server"})
+      );
     }
   }
 

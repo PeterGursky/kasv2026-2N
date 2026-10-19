@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../entities/user';
-import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
+import { catchError, defaultIfEmpty, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Auth } from '../entities/auth';
 import { MessageService } from './message-service';
@@ -106,6 +106,13 @@ export class UsersService {
         return this.processHttpError(err);
       })
     )
+  }
+  deleteUser(userId: number):Observable<boolean> {
+    return this.http.delete(`this.serverUrl/${userId}/${this.token}`).pipe(
+      map(() => true),
+      catchError(err => this.processHttpError(err)),
+      defaultIfEmpty(false)
+    );
   }
 
   private processHttpError(error: any): Observable<never> {

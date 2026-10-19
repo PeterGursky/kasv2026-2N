@@ -26,6 +26,9 @@ export class ValidationErrorPipe implements PipeTransform {
     if(value['differentPasswords']) {
       return value['differentPasswords'];
     }
+    if(value['serverConflict']) {
+      return value['serverConflict'];
+    }
     return  'other error: ' + JSON.stringify(value);
   }
 }

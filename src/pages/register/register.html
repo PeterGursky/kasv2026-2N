@@ -8,7 +8,7 @@
         <mat-label>User name</mat-label>
         <input matInput formControlName="userName">
         <mat-hint>Enter your new username</mat-hint>
-        <mat-error></mat-error>
+        <mat-error>{{userName.errors | validationError}}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>E-mail</mat-label>
