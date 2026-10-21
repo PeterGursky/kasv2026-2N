@@ -1,7 +1,8 @@
-<h2 mat-dialog-title>Install Angular</h2>
-<mat-dialog-content class="mat-typography">
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
+  {{data.message}}
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button matButton mat-dialog-close>Cancel</button>
-  <button matButton [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+  <button matButton [mat-dialog-close]="true">Yes</button>
+  <button matButton [mat-dialog-close]="false" cdkFocusInitial>No</button>
 </mat-dialog-actions>

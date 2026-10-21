@@ -7,10 +7,10 @@ import { ConfirmDialog } from '../components/confirm-dialog/confirm-dialog';
   providedIn: 'root',
 })
 export class DialogService {
-  readonly dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
   confirm(title: string, message: string):Observable<boolean> {
     const ref = this.dialog.open(ConfirmDialog, {data: {title, message}});
-    
+    return ref.afterClosed();
   }
 }

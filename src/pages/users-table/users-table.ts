@@ -6,15 +6,18 @@ import { DatePipe } from '@angular/common';
 import { GroupsPipe } from '../../pipes/groups-pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { DialogService } from '../../services/dialog-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-users-table',
-  imports: [MatTableModule, DatePipe, GroupsPipe, MatButtonModule, MatIconModule],
+  imports: [MatTableModule, DatePipe, GroupsPipe, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './users-table.html',
   styleUrl: './users-table.scss',
 })
 export class UsersTable implements OnInit{
   usersService = inject(UsersService);
+  dialogService = inject(DialogService);
   users = signal<User[]>([]);
 //  columns = signal<string[]>(['id','name','email','active','lastLogin']);
   columns = computed(() => this.usersService.loggedIn()
@@ -31,10 +34,17 @@ export class UsersTable implements OnInit{
     });
   }
   deleteUser(user: User) {
-    this.usersService.deleteUser(user.id || 0).subscribe(deleted =>{
-      if (deleted) {
-        this.loadUsers();
+    this.dialogService.confirm("Deleting user", "Do you really want to delete user " + user.name + "?"
+    ).subscribe(decision => { 
+        if (decision) {
+          this.usersService.deleteUser(user.id || 0).subscribe(deleted =>{
+            if (deleted) {
+              this.loadUsers();
+            }
+          });
+        }
       }
-    });
+    );
+
   }
 }

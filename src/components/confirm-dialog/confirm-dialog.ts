@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -8,4 +8,11 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.scss',
 })
-export class ConfirmDialog {}
+export class ConfirmDialog {
+  readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
+}
+
+interface ConfirmDialogData {
+  title: string;
+  message: string;
+}
