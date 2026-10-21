@@ -108,8 +108,11 @@ export class UsersService {
     )
   }
   deleteUser(userId: number):Observable<boolean> {
-    return this.http.delete(`this.serverUrl/${userId}/${this.token}`).pipe(
-      map(() => true),
+    return this.http.delete(`${this.serverUrl}user/${userId}/${this.token}`).pipe(
+      map(() => {
+        this.messageService.successMessage("User with id " + userId + " was deleted successfully");
+        return true;
+      }),
       catchError(err => this.processHttpError(err)),
       defaultIfEmpty(false)
     );

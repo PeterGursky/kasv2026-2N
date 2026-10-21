@@ -22,9 +22,19 @@ export class UsersTable implements OnInit{
                             : ['id','name','email']);
 
   ngOnInit() {
+    this.loadUsers();
+  }
+  loadUsers() {
     this.usersService.getUsers().subscribe(u => {
       console.log('Received users in users-table:', u);
       this.users.set(u);
+    });
+  }
+  deleteUser(user: User) {
+    this.usersService.deleteUser(user.id || 0).subscribe(deleted =>{
+      if (deleted) {
+        this.loadUsers();
+      }
     });
   }
 }
