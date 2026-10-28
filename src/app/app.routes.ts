@@ -11,7 +11,9 @@ export const routes: Routes = [
   {path: 'login', component: Login},
   {path: 'groups', component: GroupsTable},
   {path: 'register', component: Register},
-  {path: 'users/edit/:userId', component: UserEdit},
+  {path: 'users/edit/:userId', component: UserEdit, data: {
+    isEditing: true
+  }},
   {path: '', pathMatch: 'full', redirectTo: 'login'},
   {path: '**', component: PageNotFound}
 ];

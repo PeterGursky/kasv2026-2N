@@ -1,0 +1,18 @@
+mat-card-header {
+  margin-bottom: 0.5em;
+}
+mat-card {
+  width: min(100%, 50ch);
+  margin-inline: auto;
+}
+mat-form-field {
+  width: 100%;
+  margin-top: 0.8em;
+}
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+mat-checkbox {
+  display: block;
+}
