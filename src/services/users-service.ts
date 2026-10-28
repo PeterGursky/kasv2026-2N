@@ -63,6 +63,12 @@ export class UsersService {
       catchError(err => this.processHttpError(err))
     );
   }
+  getUser(id: number):Observable<User> {
+    return this.http.get<User>(`${this.serverUrl}user/${id}/${this.token}`).pipe(
+      map(jsonUser => User.clone(jsonUser)),
+      catchError(err => this.processHttpError(err))
+    )
+  }
   getGroups():Observable<Group[]> {
     return this.http.get<Group[]>(this.serverUrl + 'groups');
   }

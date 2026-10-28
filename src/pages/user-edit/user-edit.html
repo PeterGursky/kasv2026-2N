@@ -1,1 +1,4 @@
-<h2>Editing user with id {{userId}}</h2>
+<h2>Editing user with id {{userId()}}</h2>
+<p>username: {{user().name}}</p>
+<a routerLink="../{{userId() - 1}}" matButton>Previous</a>
+<a routerLink="../{{userId() + 1}}" matButton>Next</a>
