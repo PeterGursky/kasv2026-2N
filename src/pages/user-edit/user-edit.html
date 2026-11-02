@@ -7,19 +7,19 @@
     <mat-card-content>
       <mat-form-field>
         <mat-label>User name</mat-label>
-        <input matInput>
+        <input matInput [formField]="editForm.name">
         <mat-hint>Username</mat-hint>
         <mat-error></mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>E-mail</mat-label>
-        <input matInput>
+        <input matInput [formField]="editForm.email">
         <mat-hint>Enter e-mail</mat-hint>
         <mat-error></mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password">
+        <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password" [formField]="editForm.password">
         <button type="button" matIconButton matSuffix
           (click)="toggleShowPassword()"
           [attr.aria-label]="'Hide password'"
@@ -29,10 +29,10 @@
         <mat-hint></mat-hint>
         <mat-error></mat-error>
       </mat-form-field>
-      <mat-slide-toggle>Active user</mat-slide-toggle>
+      <mat-slide-toggle [formField]="editForm.active">Active user</mat-slide-toggle>
       <div>Groups, the user is member of:</div>
-      @for(group of allGroups(); track group.id) {
-        <mat-checkbox>{{group.name}}</mat-checkbox>
+      @for(group of allGroups(); track group.id; let i = $index) {
+        <mat-checkbox [formField]="editForm.groups[i]">{{group.name}}</mat-checkbox>
       }
     </mat-card-content>
     <mat-card-actions>
