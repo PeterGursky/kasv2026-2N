@@ -70,8 +70,9 @@ export class UsersService {
     )
   }
   saveUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.serverUrl}user/${this.token}`, user).pipe(
+    return this.http.post<User>(`${this.serverUrl}users/${this.token}`, user).pipe(
       map(jsonUser => User.clone(jsonUser)),
+      tap(savedUser => this.messageService.successMessage("User " + savedUser.name +" was saved.")),
       catchError(err => this.processHttpError(err))
     )
   }

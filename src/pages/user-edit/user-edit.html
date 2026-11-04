@@ -1,4 +1,4 @@
-<form (submit)="onSumbit($event)">
+<form (submit)="onSubmit($event)">
   <mat-card appearance="outlined">
     <mat-card-header>
       <mat-card-title>
@@ -14,13 +14,13 @@
         <mat-label>User name</mat-label>
         <input matInput [formField]="editForm.name">
         <mat-hint>Username</mat-hint>
-        <mat-error></mat-error>
+        <mat-error>{{editForm.name().errors() | validationError}}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>E-mail</mat-label>
         <input matInput [formField]="editForm.email">
         <mat-hint>Enter e-mail</mat-hint>
-        <mat-error></mat-error>
+        <mat-error>{{editForm.email().errors() | validationError}}</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>

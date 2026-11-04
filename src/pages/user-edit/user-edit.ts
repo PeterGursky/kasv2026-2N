@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { filter, map, switchMap, tap } from 'rxjs';
 import { UsersService } from '../../services/users-service';
@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { Group } from '../../entities/group';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { form, FormField } from '@angular/forms/signals';
+import { email, form, FormField, minLength, pattern, required } from '@angular/forms/signals';
 
 interface UserModel {
   name: string,
@@ -31,6 +31,7 @@ interface UserModel {
 export class UserEdit implements OnInit{
   usersService = inject(UsersService);
   activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
   userId = signal<number>(0); 
   user = signal<User>(new User('',''));
   userModel = signal<UserModel>({
@@ -42,7 +43,14 @@ export class UserEdit implements OnInit{
   });
   hide = signal(true);
   allGroups = signal<Group[]>([]);
-  editForm = form(this.userModel);
+  editForm = form(this.userModel, schemaPath => {
+    required(schemaPath.name, {message: "Name is required"}),
+    minLength(schemaPath.name, 3, {message: "Name must have at least 3 chars"}),
+    email(schemaPath.email, {message: "E-mail is in wrong format"}),
+    pattern(schemaPath.email, 
+            /[a-z0-9\._%+!$&*=^|~#%'`?{}/\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,16})/, 
+            {message: "E-mail is in wrong format"})
+  });
 
   ngOnInit(): void {
     // const id = Number(this.activatedRoute.snapshot.params['userId']);
@@ -76,6 +84,16 @@ export class UserEdit implements OnInit{
   onSubmit(event: Event) {
     event.preventDefault(); // formulár neodchádza na spracovanie na server
     const model = this.userModel();
-    this.usersService.saveUser(new User(model.name, model.email, this.user().id ));
+    const groups = this.allGroups().filter((_, index) => model.selectedGroups[index]);
+    this.usersService.saveUser(new User(model.name, 
+                                        model.email, 
+                                        this.user().id,
+                                        undefined,
+                                        model.password.trim() || undefined,
+                                        model.active,
+                                        groups
+                                       )).subscribe(savedUser =>{
+                                        this.router.navigateByUrl("/users");
+                                       });
   }
 }
