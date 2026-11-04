@@ -1,4 +1,5 @@
 <h2>Users:</h2>
+<a routerLink="/users/new" matButton><mat-icon>add</mat-icon>New user</a>
 <table mat-table [dataSource]="users()">
   <mat-text-column name="id" headerText="ID"></mat-text-column>
   <mat-text-column name="name" headerText="Name"></mat-text-column>

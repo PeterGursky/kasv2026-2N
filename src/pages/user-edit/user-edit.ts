@@ -32,7 +32,7 @@ export class UserEdit implements OnInit{
   usersService = inject(UsersService);
   activatedRoute = inject(ActivatedRoute);
   userId = signal<number>(0); 
-  user = signal<User>(new User('Jano','janko@jano.sk'));
+  user = signal<User>(new User('',''));
   userModel = signal<UserModel>({
     name: '',
     email: '',
@@ -42,14 +42,17 @@ export class UserEdit implements OnInit{
   });
   hide = signal(true);
   allGroups = signal<Group[]>([]);
-  editForm = form(this.user);
+  editForm = form(this.userModel);
 
   ngOnInit(): void {
     // const id = Number(this.activatedRoute.snapshot.params['userId']);
     // this.userId.set(id);
 
     this.usersService.getGroups().pipe(
-      tap(groups => this.allGroups.set(groups)),
+      tap(groups => {
+        this.allGroups.set(groups);
+        this.userModel.update(um => ({...um, selectedGroups: groups.map(_ => false)}))
+      }),
       switchMap(groups => this.activatedRoute.paramMap),
       map((values: ParamMap) => Number(values.get("userId"))),
       filter(id => !!id),
@@ -62,12 +65,17 @@ export class UserEdit implements OnInit{
         email: user.email,
         password: '',
         active: user.active,
-        selectedGroups: []
+        selectedGroups: this.allGroups().map(g => user.groups.some(ug => ug.id == g.id))
       })
     });
   }
 
   toggleShowPassword() {
     this.hide.update(value => !value);
+  }
+  onSubmit(event: Event) {
+    event.preventDefault(); // formulár neodchádza na spracovanie na server
+    const model = this.userModel();
+    this.usersService.saveUser(new User(model.name, model.email, this.user().id ));
   }
 }

@@ -1,8 +1,13 @@
-<p>username: {{user().name}}</p>
-<form>
+<form (submit)="onSumbit($event)">
   <mat-card appearance="outlined">
     <mat-card-header>
-      <mat-card-title>Editing user with id {{userId()}}</mat-card-title>
+      <mat-card-title>
+        @if(userId() == 0) {
+          Insert new user
+        } @else {
+          Editing user with id {{userId()}}
+        }
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <mat-form-field>
@@ -32,7 +37,7 @@
       <mat-slide-toggle [formField]="editForm.active">Active user</mat-slide-toggle>
       <div>Groups, the user is member of:</div>
       @for(group of allGroups(); track group.id; let i = $index) {
-        <mat-checkbox [formField]="editForm.groups[i]">{{group.name}}</mat-checkbox>
+        <mat-checkbox [formField]="editForm.selectedGroups[i]">{{group.name}}</mat-checkbox>
       }
     </mat-card-content>
     <mat-card-actions>

@@ -11,6 +11,7 @@ export const routes: Routes = [
   {path: 'login', component: Login},
   {path: 'groups', component: GroupsTable},
   {path: 'register', component: Register},
+  {path: 'users/new', component: UserEdit},
   {path: 'users/edit/:userId', component: UserEdit, data: {
     isEditing: true
   }},
