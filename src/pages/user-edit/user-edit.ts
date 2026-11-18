@@ -13,6 +13,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { Group } from '../../entities/group';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { email, form, FormField, minLength, pattern, required } from '@angular/forms/signals';
+import { MyFormsModule } from '../../modules/my-forms/my-forms-module';
 
 interface UserModel {
   name: string,
@@ -24,7 +25,7 @@ interface UserModel {
 
 @Component({
   selector: 'app-user-edit',
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, ValidationErrorPipe, MatSlideToggleModule, MatCheckboxModule, FormField],
+  imports: [RouterLink, MatCardModule, MyFormsModule, FormField],
   templateUrl: './user-edit.html',
   styleUrl: './user-edit.scss',
 })

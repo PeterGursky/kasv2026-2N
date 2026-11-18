@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
-import { Group } from '../../entities/group';
-import { UsersService } from '../../services/users-service';
+import { Group } from '../../../entities/group';
+import { UsersService } from '../../../services/users-service';
 
 @Component({
   selector: 'app-groups-table',
