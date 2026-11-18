@@ -10,10 +10,13 @@ import { DialogService } from '../../services/dialog-service';
 import { RouterLink } from '@angular/router';
 import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSort, MatSortModule} from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-users-table',
-  imports: [MatTableModule, DatePipe, GroupsPipe, MatButtonModule, MatIconModule, RouterLink, MatPaginatorModule, MatSortModule],
+  imports: [MatTableModule, DatePipe, GroupsPipe, MatButtonModule, MatIconModule, RouterLink, MatPaginatorModule, MatSortModule, MatFormFieldModule, MatInputModule],
   templateUrl: './users-table.html',
   styleUrl: './users-table.scss',
 })
@@ -34,7 +37,24 @@ export class UsersTable implements OnInit,AfterViewInit{
   }
   ngAfterViewInit(): void {
     this.usersDataSource.paginator = this.paginator;
+    this.usersDataSource.sortingDataAccessor = (user: User, col: string) => {
+      if (col == 'groups') {
+        return 'a' + user.groups[0]?.name || 'zzz';
+      }
+      return user[col as keyof User]?.toString() || '';
+//      return (user as any)[col];
+    }
+    this.usersDataSource.filterPredicate = (user: User, filter: string) => {
+      if (user.name.toLowerCase().includes(filter)) return true;
+      if (user.groups.map(g => g.name.toLowerCase()).join(',').includes(filter)) return true;
+      return false;
+    }
     this.usersDataSource.sort = this.sort;
+
+  }
+  onFilter(event: any) {
+    const filter = (event.target.value as string).trim().toLowerCase();
+    this.usersDataSource.filter = filter; 
   }
 
   loadUsers() {

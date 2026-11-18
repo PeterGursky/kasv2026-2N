@@ -1,4 +1,4 @@
-export class Group {
+gexport class Group {
   public static clone(g: Group): Group {
     return new Group(g.name, [...g.permissions], g.id);
   }
@@ -9,7 +9,7 @@ export class Group {
     public id?: number
   ){}
 
-  toString() {
-    return `${this.id}: ${this.name}, permissions: ${this.permissions}`;
-  }
+  // toString() {
+  //   return `${this.id}: ${this.name}, permissions: ${this.permissions}`;
+  // }
 }
