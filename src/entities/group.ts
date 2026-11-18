@@ -1,4 +1,4 @@
-gexport class Group {
+export class Group {
   public static clone(g: Group): Group {
     return new Group(g.name, [...g.permissions], g.id);
   }
